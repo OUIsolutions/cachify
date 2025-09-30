@@ -1,5 +1,3 @@
-print("mensagem de teste")
-
 local total_sources = argv.get_flag_size({ "src", "sources" })
 if total_sources == 0 then
     print("No sources provided. Use --src <source1> <source2> ...")
