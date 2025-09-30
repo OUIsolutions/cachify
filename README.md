@@ -67,7 +67,7 @@ vibescript cachify --src <source1> <source2> ... --cmd <command>
 - `--cache_dir`: The directory to store cache files (default: `./.cachify/`).
 - `--cache_name`: The name of the cache to use (default: `default_cache`).
 - `--expiration`: Cache expiration time in seconds. Use -1 for no expiration (default: -1).
-- `--exec_cmd`: Um comando opcional cuja saída será incluída no cálculo do hash. Isso permite que você use a saída de um comando externo (por exemplo, uma versão de um repositório Git) como parte da chave de cache.
+- `--exec_cmd`: An optional command whose output will be included in the hash calculation. This allows you to use the output of an external command (for example, a Git repository version) as part of the cache key.
 
 ### Example Usage
 
