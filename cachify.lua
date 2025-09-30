@@ -57,8 +57,7 @@ if exec_cmd then
     if handle then
         local output = handle:read("*a")
         handle:close()
-        
-        hasher.digest_var("teste")
+        hasher.digest(output)
         
         print("exec_cmd output included in hash: " .. exec_cmd)
     else
