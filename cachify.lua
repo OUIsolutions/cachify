@@ -28,19 +28,16 @@ if not expiration then
     return
 end
 
--- Nova flag: exec_cmd
-local exec_cmd = argv.get_flag_arg_by_index({ "exec_cmd" }, 1)
-
 local hasher = dtw.newHasher()
 
 -- Processa sources
 for i=1,total_sources do
     local current = argv.get_flag_arg_by_index({ "src", "sources" }, i)
-    
+
     if dtw.isfile(current) then
         hasher.digest_file(current)
     end
-    
+
     if dtw.isdir(current) then
         if mode == "last_modification" then
             hasher.digest_folder_by_last_modification(current)
@@ -51,17 +48,19 @@ for i=1,total_sources do
     end
 end
 
-
-if exec_cmd then
-    local handle = io.popen(exec_cmd)
+-- Processa hash_cmd (agora como array)
+local total_hash_cmds = argv.get_flag_size({ "hash_cmd" })
+for i=1,total_hash_cmds do
+    local hash_cmd = argv.get_flag_arg_by_index({ "hash_cmd" }, i)
+    local handle = io.popen(hash_cmd)
     if handle then
         local output = handle:read("*a")
         handle:close()
         hasher.digest(output)
-        
-        print("exec_cmd output included in hash: " .. exec_cmd)
+
+        print("hash_cmd output included in hash: " .. hash_cmd)
     else
-        print("Warning: Failed to execute exec_cmd: " .. exec_cmd)
+        print("Warning: Failed to execute hash_cmd: " .. hash_cmd)
     end
 end
 

@@ -67,7 +67,7 @@ vibescript cachify --src <source1> <source2> ... --cmd <command>
 - `--cache_dir`: The directory to store cache files (default: `./.cachify/`).
 - `--cache_name`: The name of the cache to use (default: `default_cache`).
 - `--expiration`: Cache expiration time in seconds. Use -1 for no expiration (default: -1).
-- `--exec_cmd`: An optional command whose output will be included in the hash calculation. This allows you to use the output of an external command (for example, a Git repository version) as part of the cache key.
+- `--hash_cmd`: One or more optional commands whose output will be included in the hash calculation. This allows you to use the output of external commands (for example, a Git repository version) as part of the cache key.
 
 ### Example Usage
 
@@ -78,11 +78,14 @@ vibescript cachify --sources src --cmd "npm run build"
 # Use content-based caching and a custom cache directory
 vibescript cachify --sources src --mode content --cache_dir .my_cache --cmd "echo 'Files have changed!'"
 
-# Inclui a saída de um comando git no hash para que o cache seja invalidado se o HEAD mudar
-vibescript cachify --sources src --exec_cmd "git rev-parse HEAD" --cmd "npm test"
+# Include git command output in the hash so the cache is invalidated if HEAD changes
+vibescript cachify --sources src --hash_cmd "git rev-parse HEAD" --cmd "npm test"
 
-# Usa um comando externo para gerar uma chave de cache dinâmica baseada na data atual
-vibescript cachify --sources src --exec_cmd "date +%Y%m%d" --cmd "gerar_relatorio_diario.sh"
+# Use an external command to generate a dynamic cache key based on the current date
+vibescript cachify --sources src --hash_cmd "date +%Y%m%d" --cmd "gerar_relatorio_diario.sh"
+
+# Use multiple hash commands to include several factors in the cache key
+vibescript cachify --sources src --hash_cmd "git rev-parse HEAD" --hash_cmd "node --version" --cmd "npm run build"
 ```
 
 ---
