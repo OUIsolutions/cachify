@@ -15,6 +15,15 @@ if mode ~= "last_modification" and mode ~= "content" then
     print("Invalid --mode. Use 'last_modification' or 'content'.")
     return
 end
+local cache_dir = argv.get_flag_arg_by_index({ "cache_dir" }, 1) or "./.cachify/"
+local cache_name = argv.get_flag_arg_by_index({ "cache_name" }, 1) or "default_cache"
+
+local expiration_str = tonumber(argv.get_flag_arg_by_index({ "expiration" }, 1)) or "-1" 
+local expiration = tonumber(expiration_str)
+if not expiration then
+    print("Invalid --expiration. Use a positive integer or -1 for no expiration.")
+    return
+end
 
 local hasher = dtw.newHasher()
 
@@ -33,3 +42,23 @@ for i=1,total_sources do
     end
 
 end 
+
+local executed = false
+dtw.execute_cache({
+    expiration = expiration,              
+    cache_name = cache_name,          
+    cache_dir = cache_dir,        
+    input = hasher.get_value(),
+    callback = function()
+        os.execute(cmd)
+        executed = true
+    end
+})
+if executed then 
+    print("Cache miss. Command executed.")
+end
+if not executed then 
+    print("Cache hit. Command not executed.")
+end
+
+
