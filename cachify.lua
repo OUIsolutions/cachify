@@ -44,9 +44,10 @@ CACHIFY_API.execute_config = function(config)
         PRIVATE_CACHIFY_API.process_source(hasher, source, config.mode)
         
     end
-   
-    for _, hash_cmd in ipairs(config.hash_cmd) do
-        PRIVATE_CACHIFY_API.execute_hash_command(hash_cmd)
+    if config.hash_cmd then 
+        for _, hash_cmd in ipairs(config.hash_cmd) do
+            PRIVATE_CACHIFY_API.execute_hash_command(hash_cmd)
+        end
     end
     local final_hash = hasher.get_value()   
     local cache_path = config.cache_dir .. "/" .. config.cache_name .. "/" .. final_hash 

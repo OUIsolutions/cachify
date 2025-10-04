@@ -53,11 +53,19 @@ vibescript add_script --file https://github.com/OUIsolutions/cachify/releases/do
 
 ## Usage
 
+
+
+
+
 Cachify will execute the specified command only if the hash of the source files has changed since the last execution.
+
+
 
 ```bash
 vibescript cachify --src <source1> <source2> ... --cmd <command>
 ```
+
+
 
 ### Command Line Options
 
