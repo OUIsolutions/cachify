@@ -21,7 +21,7 @@ PRIVATE_CACHIFY_API.process_source = function(hasher, source, mode)
     end
     
 
-    
+
     if dtw.isdir(source) then
         if mode == "last_modification" then
             hasher.digest_folder_by_last_modification(source)
@@ -50,9 +50,24 @@ CACHIFY_API.execute_config = function(config)
     end
     local final_hash = hasher.get_value()   
     local cache_path = config.cache_dir .. "/" .. config.cache_name .. "/" .. final_hash 
-    if not dtw.isfile(cache_path) then
-        config.callback()
-        dtw.write_file(cache_path, "")
+    local exist = dtw.isfile(cache_path)
+
+    if exist  and config.ignore_first then
+        
+        local content = dtw.load_file(cache_path)
+        if content == "f" then 
+            config.callback()
+            dtw.write_file(cache_path, "s")
+            return true
+        end
+    end
+    if not exist then
+
+        if not config.ignore_first then
+            config.callback()
+        end 
+
+        dtw.write_file(cache_path, "f")
         return true
     end 
     return false
