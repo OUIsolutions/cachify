@@ -56,19 +56,19 @@ CACHIFY_API.execute_config = function(config)
         
         local content = dtw.load_file(cache_path)
         if content == "f" then 
-            pcall(config.callback)
             dtw.write_file(cache_path, "s")
+            pcall(config.callback)
             return true
         end
     end
     if not exist then
+        dtw.write_file(cache_path, "f")
 
         if not config.ignore_first then
             pcall(config.callback)
+            return true
         end
 
-        dtw.write_file(cache_path, "f")
-        return true
     end 
     return false
 
