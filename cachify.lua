@@ -20,6 +20,8 @@ PRIVATE_CACHIFY_API.process_source = function(hasher, source, mode)
         hasher.digest_file(source)
     end
     
+
+    
     if dtw.isdir(source) then
         if mode == "last_modification" then
             hasher.digest_folder_by_last_modification(source)
