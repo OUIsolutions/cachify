@@ -53,13 +53,59 @@ vibescript add_script --file https://github.com/OUIsolutions/cachify/releases/do
 
 ## Usage
 
+Cachify can be used in two ways: as a command-line tool or as a Lua API within your VibeScript scripts.
 
+### API Usage
 
+You can integrate Cachify directly into your VibeScript Lua scripts:
 
+```lua
+local cachify = load_global_module("cachify")
+
+cachify.execute_config({
+    sources = {"src/", "config.json"},
+    callback = function() 
+        print("Building project...")
+        os.execute("npm run build")
+    end,
+    cache_name = "my_build_cache",
+    cache_dir = ".cachify",
+    mode = "last_modification",  -- or "content"
+    hash_cmd = {"git rev-parse HEAD"},  -- optional
+    ignore_first = false,  -- optional
+})
+```
+
+#### API Configuration Options
+
+- `sources` (required): Array of file paths or directories to monitor
+- `callback` (required): Function to execute when cache is missed
+- `cache_name` (optional): Name of the cache (default: "default_cache")
+- `cache_dir` (optional): Directory to store cache files (default: "./.cachify/")
+- `mode` (optional): Caching mode - `"last_modification"` or `"content"` (default: "last_modification")
+- `hash_cmd` (optional): Array of shell commands whose output will be included in the hash
+- `ignore_first` (optional): If true, skips execution on the very first run (default: false)
+
+#### Return Values
+
+The `execute_config` function returns two boolean values:
+- `executed`: Whether the callback was executed (true on cache miss)
+- `is_first`: Whether this was the first execution
+
+```lua
+local executed, is_first = cachify.execute_config({...})
+if executed and is_first then
+    print("First time running!")
+elseif executed then
+    print("Cache miss - files changed!")
+else
+    print("Cache hit - nothing to do!")
+end
+```
+
+### Command Line Usage
 
 Cachify will execute the specified command only if the hash of the source files has changed since the last execution.
-
-
 
 ```bash
 vibescript cachify --src <source1> <source2> ... --cmd <command>
@@ -76,8 +122,9 @@ vibescript cachify --src <source1> <source2> ... --cmd <command>
 - `--cache_name`: The name of the cache to use (default: `default_cache`).
 - `--expiration`: Cache expiration time in seconds. Use -1 for no expiration (default: -1).
 - `--hash_cmd`: One or more optional commands whose output will be included in the hash calculation. This allows you to use the output of external commands (for example, a Git repository version) as part of the cache key.
+- `--ignore_first`: If present, skips command execution on the very first run.
 
-### Example Usage
+### Command Line Examples
 
 ```bash
 # Execute a build script if any file in the 'src' directory has been modified
@@ -94,6 +141,47 @@ vibescript cachify --sources src --hash_cmd "date +%Y%m%d" --cmd "gerar_relatori
 
 # Use multiple hash commands to include several factors in the cache key
 vibescript cachify --sources src --hash_cmd "git rev-parse HEAD" --hash_cmd "node --version" --cmd "npm run build"
+
+# Ignore the first execution (useful for initialization)
+vibescript cachify --sources src --cmd "npm run build" --ignore_first
+```
+
+### API Examples
+
+```lua
+-- Basic usage with file monitoring
+local cachify = load_global_module("cachify")
+
+cachify.execute_config({
+    sources = {"cachify.lua", "README.md"},
+    callback = function() 
+        print("Files changed! Running tests...")
+        os.execute("lua test.lua")
+    end,
+    cache_name = "test_cache",
+    cache_dir = ".cachify",
+})
+
+-- Advanced usage with git tracking and custom logic
+local cachify = load_global_module("cachify")
+
+local executed, is_first = cachify.execute_config({
+    sources = {"src/"},
+    mode = "content",
+    hash_cmd = {"git rev-parse HEAD", "node --version"},
+    callback = function()
+        print("Building project...")
+        os.execute("npm run build")
+        os.execute("npm test")
+    end,
+    cache_name = "build_cache",
+    cache_dir = ".build_cache",
+    ignore_first = true,
+})
+
+if executed then
+    print("Build completed successfully!")
+end
 ```
 
 ---
