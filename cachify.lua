@@ -58,19 +58,21 @@ CACHIFY_API.execute_config = function(config)
         if content == "f" then 
             dtw.write_file(cache_path, "s")
             pcall(config.callback)
-            return true
+            return true, false  
         end
+        return false, false 
     end
     if not exist then
         dtw.write_file(cache_path, "f")
 
         if not config.ignore_first then
             pcall(config.callback)
-            return true
+            return true, true  
         end
+        return false, true
 
     end 
-    return false
+    return false, false  -- not executed, not first_execution
 
 end 
 -- ============================================
@@ -156,14 +158,23 @@ CACHIFY_CLI.main = function()
 
     local config = config_or_error
 
-    local executed = CACHIFY_API.execute_config(config)
+    local executed, is_first = CACHIFY_API.execute_config(config)
 
     
 
     if executed then
-        CACHIFY_CLI.print_info("Cache miss. Command executed.")
-    else
-        CACHIFY_CLI.print_success("Cache hit. Command not executed.")
+        if is_first then
+            CACHIFY_CLI.print_info("First execution detected. Command executed.")
+        else
+            CACHIFY_CLI.print_info("Cache miss. Command executed.")
+        end
+    end 
+    if not executed then
+        if is_first then
+            CACHIFY_CLI.print_info("First execution detected. Command executed.")
+        else
+            CACHIFY_CLI.print_info("Cache miss. Command executed.")
+        end
     end
 end
 
