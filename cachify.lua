@@ -173,7 +173,7 @@ CACHIFY_CLI.main = function()
         if is_first then
             CACHIFY_CLI.print_info("First execution detected. Not Command executed.")
         else
-            CACHIFY_CLI.print_info("Cache miss. Command Not executed.")
+            CACHIFY_CLI.print_info("Cache Hit. Command Not executed.")
         end
     end
 end
