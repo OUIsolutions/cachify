@@ -52,19 +52,10 @@ CACHIFY_API.execute_config = function(config)
     local final_hash = hasher.get_value()   
     local cache_path = config.cache_dir .. "/" .. config.cache_name .. "/" .. final_hash 
     local exist = dtw.isfile(cache_path)
-
-    if exist  and config.ignore_first then
-        
-        local content = dtw.load_file(cache_path)
-        if content == "f" then 
-            dtw.write_file(cache_path, "s")
-            pcall(config.callback)
-            return true, false  
-        end
-        return false, false 
-    end
     if not exist then
         dtw.write_file(cache_path, "f")
+
+        
 
         if not config.ignore_first then
             pcall(config.callback)
