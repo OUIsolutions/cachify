@@ -34,6 +34,7 @@ end
 -- ============================================
 local CACHIFY_API = {}
 
+
 CACHIFY_API.execute_config = function(config)
     local hasher = dtw.newHasher()
 
@@ -121,7 +122,7 @@ CACHIFY_CLI.print_warning = function(message)
 end
 
 CACHIFY_CLI.main = function()
-    local ok, config_or_error = CACHIFY_CLI.parse_arguments()
+    local ok, config_or_error = pcall(CACHIFY_CLI.parse_arguments)
     
     if not ok then
         CACHIFY_CLI.print_error(config_or_error)
@@ -129,8 +130,11 @@ CACHIFY_CLI.main = function()
     end
 
     local config = config_or_error
+
     local executed = CACHIFY_API.execute_config(config)
+
     
+
     if executed then
         CACHIFY_CLI.print_info("Cache miss. Command executed.")
     else
