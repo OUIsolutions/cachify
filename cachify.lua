@@ -117,6 +117,8 @@ CACHIFY_CLI.parse_arguments = function()
         error("Invalid expiration value. Must be a number.")
     end    
     config.hash_cmd ={}
+    config.ignore_first = argv.get_flag({ "ignore_first" }) or false
+    
     local total_hash_cmds = argv.get_flag_size({ "hash_cmd" })
     for i = 1, total_hash_cmds do
         local hash_cmd = argv.get_flag_arg_by_index({ "hash_cmd" }, i)
