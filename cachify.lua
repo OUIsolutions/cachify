@@ -47,8 +47,13 @@ CACHIFY_API.execute_config = function(config)
         PRIVATE_CACHIFY_API.execute_hash_command(hash_cmd)
     end
     local final_hash = hasher.get_value()   
-    print(final_hash)
-    return true
+    local cache_path = config.cache_dir .. "/" .. config.cache_name .. "/" .. final_hash 
+    if not dtw.isfile(cache_path) then
+        config.callback()
+        dtw.write_file(cache_path, "")
+        return true
+    end 
+    return false
 
 end 
 -- ============================================
