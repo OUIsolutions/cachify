@@ -35,7 +35,7 @@ end
 local CACHIFY_API = {}
 
 CACHIFY_API.execute_config = function(config)
-    local hasher = dtw.hasher()
+    local hasher = dtw.newHasher()
 
     for _, source in ipairs(config.sources) do
         PRIVATE_CACHIFY_API.process_source(hasher, source, config.mode)
@@ -47,8 +47,8 @@ CACHIFY_API.execute_config = function(config)
     end
     local final_hash = hasher.get_value()   
     print(final_hash)
+    return true
 
-    
 end 
 -- ============================================
 -- CLI Layer - User Interface Functions
@@ -129,8 +129,7 @@ CACHIFY_CLI.main = function()
     end
 
     local config = config_or_error
-    
-    local executed = CACHIFY_API.hit_cache(config)
+    local executed = CACHIFY_API.execute_config(config)
     
     if executed then
         CACHIFY_CLI.print_info("Cache miss. Command executed.")
