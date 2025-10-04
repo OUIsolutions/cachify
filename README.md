@@ -38,17 +38,17 @@ Choose the appropriate installation method for your operating system:
 
 #### Option A: Pre-compiled Binary (Linux only)
 ```bash
-curl -L https://github.com/OUIsolutions/VibeScript/releases/download/0.32.0/vibescript.out -o vibescript.out && chmod +x vibescript.out && sudo mv vibescript.out /usr/local/bin/vibescript
+curl -L https://github.com/OUIsolutions/VibeScript/releases/download/0.41.0/vibescript.out -o vibescript.out && chmod +x vibescript.out && sudo mv vibescript.out /usr/local/bin/vibescript
 ```
 
 #### Option B: Compile from Source (Linux and macOS)
 ```bash
-curl -L https://github.com/OUIsolutions/VibeScript/releases/download/0.35.0/amalgamation.c -o vibescript.c && gcc vibescript.c -o vibescript.out && sudo mv vibescript.out /usr/local/bin/vibescript
+curl -L https://github.com/OUIsolutions/VibeScript/releases/download/0.41.0/amalgamation.c -o vibescript.c && gcc vibescript.c -o vibescript.out && sudo mv vibescript.out /usr/local/bin/vibescript
 ```
 
 ### Step 2: Install Cachify
 ```bash
-vibescript add_script --file https://github.com/OUIsolutions/cachify/releases/download/0.1.0/cli.lua cachify
+vibescript add_script --file https://github.com/OUIsolutions/cachify/releases/download/0.3.0/cli.lua cachify
 ```
 
 ## Usage
