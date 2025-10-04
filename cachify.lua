@@ -41,22 +41,6 @@ end
 -- ============================================
 local CACHIFY_API = {}
 
-CACHIFY_API.parse_arguments = function()
-    local config = {}
-    
-    config.total_sources = argv.get_flag_size({ "src", "sources" })
-    config.cmd = argv.get_flag_arg_by_index({ "cmd" }, 1)
-    config.mode = argv.get_flag_arg_by_index({ "mode" }, 1) or "last_modification"
-    config.cache_dir = argv.get_flag_arg_by_index({ "cache_dir" }, 1) or "./.cachify/"
-    config.cache_name = argv.get_flag_arg_by_index({ "cache_name" }, 1) or "default_cache"
-    
-    local expiration_str = argv.get_flag_arg_by_index({ "expiration" }, 1) or "-1"
-    config.expiration = tonumber(expiration_str)
-    
-    config.total_hash_cmds = argv.get_flag_size({ "hash_cmd" })
-    
-    return config
-end
 
 CACHIFY_API.validate_config = function(config)
     if config.total_sources == 0 then
@@ -183,6 +167,26 @@ end
 -- ============================================
 local CACHIFY_CLI = {}
 
+
+
+CACHIFY_CLI.parse_arguments = function()
+    local config = {}
+    
+    config.total_sources = argv.get_flag_size({ "src", "sources" })
+    config.cmd = argv.get_flag_arg_by_index({ "cmd" }, 1)
+    config.mode = argv.get_flag_arg_by_index({ "mode" }, 1) or "last_modification"
+    config.cache_dir = argv.get_flag_arg_by_index({ "cache_dir" }, 1) or "./.cachify/"
+    config.cache_name = argv.get_flag_arg_by_index({ "cache_name" }, 1) or "default_cache"
+    
+    local expiration_str = argv.get_flag_arg_by_index({ "expiration" }, 1) or "-1"
+    config.expiration = tonumber(expiration_str)
+    
+    config.total_hash_cmds = argv.get_flag_size({ "hash_cmd" })
+    
+    return config
+end
+
+
 CACHIFY_CLI.print_error = function(message)
     print("❌ ERROR: " .. message)
 end
@@ -200,7 +204,7 @@ CACHIFY_CLI.print_warning = function(message)
 end
 
 CACHIFY_CLI.main = function()
-    local config = CACHIFY_API.parse_arguments()
+    local config = CACHIFY_CLI.parse_arguments()
     
     local valid, error_msg = CACHIFY_API.validate_config(config)
     if not valid then
