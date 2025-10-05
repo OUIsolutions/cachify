@@ -53,17 +53,18 @@ CACHIFY_API.execute_config = function(config)
     local cache_path = config.cache_dir .. "/" .. config.cache_name .. "/" .. final_hash 
     local exist = dtw.isfile(cache_path)
     if not exist then
-        dtw.write_file(cache_path, "f")
+        dtw.write_file(cache_path, "")
 
-        
-
-        if not config.ignore_first then
-            pcall(config.callback)
-            return true, true  
+        if config.ignore_first then
+            local itens = dtw.list_files(config.cache_dir .. "/" .. config.cache_name .. "/")
+            if #itens == 0 then 
+                return false, true  -- not executed, first_execution
+            end
         end
-        return false, true
+        pcall(config.callback)
+        return true, true
+    end
 
-    end 
     return false, false  -- not executed, not first_execution
 
 end 
