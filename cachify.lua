@@ -68,6 +68,33 @@ CACHIFY_API.execute_config = function(config)
     return false, false  -- not executed, not first_execution
 
 end 
+
+
+
+CACHIFY_API.register_first = function(config)
+    local hasher = dtw.newHasher()
+
+    for _, source in ipairs(config.sources) do
+        PRIVATE_CACHIFY_API.process_source(hasher, source, config.mode)
+        
+    end
+    if config.hash_cmd then 
+        for _, hash_cmd in ipairs(config.hash_cmd) do
+            PRIVATE_CACHIFY_API.execute_hash_command(hash_cmd)
+        end
+    end
+    local final_hash = hasher.get_value()   
+    local cache_path = config.cache_dir .. "/" .. config.cache_name .. "/" .. final_hash 
+    local exist = dtw.isfile(cache_path)
+    if not exist then
+        dtw.write_file(cache_path, "")
+        return true
+    end
+
+    return false
+
+end 
+
 -- ============================================
 -- CLI Layer - User Interface Functions
 -- ============================================
