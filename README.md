@@ -41,6 +41,7 @@ Choose the appropriate installation method for your operating system:
 curl -L https://github.com/OUIsolutions/VibeScript/releases/download/0.41.0/vibescript.out -o vibescript.out && chmod +x vibescript.out && sudo mv vibescript.out /usr/local/bin/vibescript
 ```
 
+
 #### Option B: Compile from Source (Linux and macOS)
 ```bash
 curl -L https://github.com/OUIsolutions/VibeScript/releases/download/0.41.0/amalgamation.c -o vibescript.c && gcc vibescript.c -o vibescript.out && sudo mv vibescript.out /usr/local/bin/vibescript
