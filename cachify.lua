@@ -57,7 +57,7 @@ CACHIFY_API.execute_config = function(config)
 
         if config.ignore_first then
             local itens = dtw.list_files(config.cache_dir .. "/" .. config.cache_name .. "/")
-            if #itens == 0 then 
+            if #itens == 1 then 
                 return false, true  -- not executed, first_execution
             end
         end
