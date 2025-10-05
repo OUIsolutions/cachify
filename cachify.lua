@@ -50,6 +50,7 @@ CACHIFY_API.execute_config = function(config)
     local final_hash = hasher.get_value()   
     local cache_path = config.cache_dir .. "/" .. config.cache_name .. "/" .. final_hash 
     local exist = dtw.isfile(cache_path)
+    print("cache_path", cache_path)
     if not exist then
         dtw.write_file(cache_path, "")
 
