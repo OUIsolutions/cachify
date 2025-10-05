@@ -16,6 +16,9 @@ PRIVATE_CACHIFY_API.execute_hash_command = function(hash_cmd)
 end
 
 PRIVATE_CACHIFY_API.process_source = function(hasher, source, mode)
+    if not mode then
+        mode = "last_modification"
+    end
     if dtw.isfile(source) then
         hasher.digest_file(source)
     end
