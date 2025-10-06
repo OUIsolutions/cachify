@@ -49,7 +49,7 @@ curl -L https://github.com/OUIsolutions/VibeScript/releases/download/0.41.0/amal
 
 ### Step 2: Install Cachify
 ```bash
-vibescript add_script --file https://github.com/OUIsolutions/cachify/releases/download/0.3.0/cli.lua cachify
+vibescript add_script --file https://github.com/OUIsolutions/cachify/releases/download/0.6.0/cachify.lua cachify
 ```
 
 ## Usage
